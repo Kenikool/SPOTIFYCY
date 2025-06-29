@@ -1,8 +1,9 @@
 import express from "express";
+import { clerkMiddleware } from "@clerk/express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { clerkMiddleware } from "@clerk/express";
+
 import userRoutes from "./routes/user.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import authRoutes from "./routes/auth.route.js";

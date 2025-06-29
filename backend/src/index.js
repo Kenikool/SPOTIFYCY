@@ -1,8 +1,10 @@
+import path, { dirname } from "path";
 import express from "express";
 import { clerkMiddleware } from "@clerk/express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload";
 
 import userRoutes from "./routes/user.route.js";
 import adminRoutes from "./routes/admin.route.js";
@@ -11,14 +13,28 @@ import songRoutes from "./routes/song.route.js";
 import albumRoutes from "./routes/album.route.js";
 import statsRoutes from "./routes/stat.route.js";
 import { connectDB } from "./lib/db.js";
-const app = express();
+
 dotenv.config();
+
+const __dirname = path.resolve();
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
+
 app.use(cookieParser());
 app.use(clerkMiddleware());
-
-const PORT = process.env.PORT || 3000;
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: path.join(--dirname, "temp"),
+    createParentPath: true,
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB max fie size
+    },
+  })
+);
 
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);

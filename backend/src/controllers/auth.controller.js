@@ -1,6 +1,6 @@
 // This is a callback to save user signup with cleark to our database,
 
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 
 export const authCallback = async (req, res, next) => {
   try {

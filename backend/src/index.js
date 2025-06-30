@@ -28,7 +28,7 @@ app.use(clerkMiddleware());
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: path.join(--dirname, "temp"),
+    tempFileDir: path.join(__dirname, "temp"),
     createParentPath: true,
     limits: {
       fileSize: 10 * 1024 * 1024, // 10MB max fie size
@@ -44,14 +44,12 @@ app.use("/api/albums", albumRoutes);
 app.use("/api/stats", statsRoutes);
 
 app.use((err, req, res) => {
-  res
-    .status(500)
-    .json({
-      messsage:
-        process.env.NODE_ENV === "production"
-          ? "Internal server error"
-          : err.messsage,
-    });
+  res.status(500).json({
+    messsage:
+      process.env.NODE_ENV === "production"
+        ? "Internal server error"
+        : err.messsage,
+  });
 });
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

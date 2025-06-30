@@ -7,6 +7,7 @@
   "dependencies": {
     "@clerk/express": "^1.7.2",
     "append-field": "^1.0.0",
+    "axios": "^1.10.0",
     "buffer-from": "^1.1.2",
     "busboy": "^1.6.0",
     "cloudinary": "^2.7.0",

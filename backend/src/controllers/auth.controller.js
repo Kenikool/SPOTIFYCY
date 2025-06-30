@@ -7,11 +7,11 @@ export const authCallback = async (req, res, next) => {
     const { id, firstName, lastName, imageUrl } = req.body;
 
     // check if user already exist
-    const user = await User.findOne({ clearkId: id });
+    const user = await User.findOne({ clerkId: id });
     if (!user) {
       // signup
       await User.create({
-        clearkId: id,
+        clerkId: id,
         fullName: `${firstName} ${lastName}`,
         imageUrl,
       });
@@ -20,6 +20,11 @@ export const authCallback = async (req, res, next) => {
       success: true,
     });
   } catch (error) {
-    next(err);
+    // Handle duplicate key error (user already exists)
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.clerkId) {
+      return res.status(200).json({ success: true, message: "User already exists." });
+    }
+    console.log("Eror in auth callback", error);
+    next(error);
   }
 };

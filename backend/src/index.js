@@ -20,9 +20,13 @@ const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
-
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(clerkMiddleware());
 app.use(
@@ -43,14 +47,18 @@ app.use("/api/songs", songRoutes);
 app.use("/api/albums", albumRoutes);
 app.use("/api/stats", statsRoutes);
 
-app.use((err, req, res) => {
-  res.status(500).json({
-    messsage:
-      process.env.NODE_ENV === "production"
-        ? "Internal server error"
-        : err.messsage,
-  });
+// error handler
+app.use((err, req, res, next) => {
+  res
+    .status(500)
+    .json({
+      message:
+        process.env.NODE_ENV === "production"
+          ? "Internal server error"
+          : err.message,
+    });
 });
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   connectDB();

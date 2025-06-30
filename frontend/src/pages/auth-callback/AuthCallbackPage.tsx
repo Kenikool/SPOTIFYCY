@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useRef } from "react";
 import {
   Card,
   CardAction,
@@ -9,7 +9,35 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BiLoader } from "react-icons/bi";
+import { useUser } from "@clerk/clerk-react";
+import { axiosInstance } from "@/lib/axios";
+import { useNavigate } from "react-router-dom";
 const AuthCallbackPage = () => {
+  const { isLoaded, user } = useUser();
+  const navigate = useNavigate();
+
+  // This will make sure this function never run twice
+  const syncAttempted = useRef(false);
+
+  useEffect(() => {
+    const syncUser = async () => {
+      try {
+        if (!isLoaded || !user || syncAttempted.current) return;
+        await axiosInstance.post("/auth/callback", {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          imageUrl: user.imageUrl,
+        });
+        syncAttempted.current = true;
+      } catch (error) {
+        console.log("Error in auth callback", error);
+      } finally {
+        navigate("/");
+      }
+    };
+    syncUser();
+  }, [user, isLoaded, navigate]);
   return (
     <div className="h-screen w-full bg-black flex items-center justify-center">
       <Card className="w-[90%] max-w-md bg-zinc-900 border-zink-800 ">

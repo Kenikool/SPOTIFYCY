@@ -1,8 +1,9 @@
 import { axiosInstance } from "./../lib/axios";
 import { create } from "zustand";
+import { Album, Song } from "../types";
 interface MusicStore {
-  songs: any[];
-  albums: any[];
+  songs: Song[];
+  albums: Album[];
   isLoading: boolean;
   error: string | null;
   fetchAlbums: () => Promise<void>; //Promise<void>, and we are not returning anything

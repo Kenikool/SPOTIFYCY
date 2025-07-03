@@ -2,7 +2,7 @@ import { axiosInstance } from "@/lib/axios";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import { useAuth } from "@clerk/clerk-react";
-
+import { useAuthStore } from "@/store/useAuthStore";
 // updating and deleting headers or token
 
 const updateApiToken = (token: string | null) => {
@@ -14,11 +14,13 @@ const updateApiToken = (token: string | null) => {
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { getToken, userId } = useAuth();
   const [loading, setLoading] = useState(true);
+  const { checkAdminStatus } = useAuthStore();
   useEffect(() => {
     const initAuth = async () => {
       try {
         const token = await getToken();
         updateApiToken(token);
+        if (token) await checkAdminStatus();
       } catch (error) {
         updateApiToken(null);
         console.log("Error in auth provider", error);
@@ -27,7 +29,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     initAuth();
-  }, [getToken, userId]);
+  }, [getToken, userId, checkAdminStatus]);
 
   if (loading)
     return (

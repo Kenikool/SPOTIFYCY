@@ -1,6 +1,7 @@
 import React from "react";
 import { useMusicStore } from "@/store/useMusicStore";
 import FeaturedGridSkeleton from "@/components/skeletons/FeaturedGridSkeleton";
+import PlayButton from "./PlayButton";
 
 const FeaturedSection = () => {
   const { featuredSongs, isLoading, error } = useMusicStore();
@@ -22,8 +23,9 @@ const FeaturedSection = () => {
             <h3 className="font-medium truncate">{song.title}</h3>
             <p className="text-sm text-zinc-400 truncate">{song.artist}</p>
           </div>
+          // TODO: add play button
+          <PlayButton song={song} />
         </div>
-        // TODO: add play button
       ))}
     </div>
   );

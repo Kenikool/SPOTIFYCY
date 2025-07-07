@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/resizable";
 import { Outlet } from "react-router-dom";
 import LeftSidebar from "./components/LeftSidebar";
-import PlaybackControls from "./components/PlaybackControls";
+import { PlaybackControls } from "./components/PlaybackControls";
 import FriendsActivities from "./components/FriendsActivities";
 import AudioPlayer from "./components/AudioPlayer";
 const MainLayout = () => {

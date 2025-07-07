@@ -84,24 +84,6 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     if (prevIndex >= 0) {
       const prevSong = queue[prevIndex];
 
-      set({
-        currentSong: prevSong,
-        currentIndex: prevIndex,
-        isPlaying: true,
-      });
-    } else {
-      // no prev song
-      set({ isPlaying: false });
-    }
-  },
-  playPrevious: () => {
-    const { currentIndex, queue } = get();
-    const prevIndex = currentIndex - 1;
-
-    // theres a prev song
-    if (prevIndex >= 0) {
-      const prevSong = queue[prevIndex];
-
       const socket = useChatStore.getState().socket;
       if (socket.auth) {
         socket.emit("update_activity", {

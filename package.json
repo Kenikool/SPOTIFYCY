@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "dependencies": {
-    "@clerk/express": "^1.7.2",
+    "@clerk/express": "^1.7.5",
     "append-field": "^1.0.0",
     "axios": "^1.10.0",
     "buffer-from": "^1.1.2",

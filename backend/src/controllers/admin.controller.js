@@ -16,7 +16,7 @@ const uploadToCloudinary = async (file) => {
 export const createSong = async (req, res, next) => {
   try {
     // if user did not provide any fields
-    if (!req.files || !req.audioFile || !req.files.imageFile) {
+    if (!req.files || !req.files.audioFile || !req.files.imageFile) {
       return res.status(400).json({ message: "Please upload all files" });
     }
 
@@ -44,7 +44,10 @@ export const createSong = async (req, res, next) => {
         $push: { songs: song._id },
       });
     }
-  } catch (error) {}
+    res.status(201).json(song);
+  } catch (error) {
+    next(error);
+  }
 };
 export const deleteSong = async (req, res, next) => {
   try {

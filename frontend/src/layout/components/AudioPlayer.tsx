@@ -1,5 +1,7 @@
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { useEffect, useRef } from "react";
+import { useChatStore } from "@/store/useChatStore";
+import { useUser } from "@clerk/clerk-react";
 
 const AudioPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -7,6 +9,33 @@ const AudioPlayer = () => {
 
   const { currentSong, isPlaying, playNext } = usePlayerStore();
 
+  const { socket } = useChatStore();
+  const { user } = useUser();
+
+  // Emit activity on play/pause
+  useEffect(() => {
+    if (!socket || !user || !currentSong) return;
+
+    if (isPlaying) {
+      socket.emit("update_activity", {
+        userId: user.id,
+        activity: `Playing ${currentSong.title} by ${currentSong.artist}`,
+      });
+    } else {
+      socket.emit("update_activity", {
+        userId: user.id,
+        activity: "Idle",
+      });
+    }
+    return () => {
+      if (socket && user) {
+        socket.emit("update_activity", {
+          userId: user.id,
+          activity: "Idle",
+        });
+      }
+    };
+  }, [isPlaying, currentSong, socket, user]);
   // handle play/pause logic
   useEffect(() => {
     if (isPlaying) audioRef.current?.play();

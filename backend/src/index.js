@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
+import http, { createServer } from "http";
+import { initializeSocket } from "./lib/socket.js";
 
 import userRoutes from "./routes/user.route.js";
 import adminRoutes from "./routes/admin.route.js";
@@ -19,6 +21,9 @@ dotenv.config();
 const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const httpServer = createServer(app);
+initializeSocket(httpServer);
 
 app.use(express.json({ limit: "10mb" }));
 app.use(
@@ -57,7 +62,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   connectDB();
 });
